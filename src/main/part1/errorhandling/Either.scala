@@ -38,10 +38,7 @@ object Either {
 
 	def traverse[E, A, B](l: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
 		l match {
-			case h :: t => for {
-				hh <- f(h)
-				tt <- traverse(t)(f)
-			} yield (hh :: tt)
+			case h :: t => (f(h) map2 traverse(t)(f))(_ :: _)
 			case Nil => Right(Nil)
 		}
 }
