@@ -1,13 +1,13 @@
-import part1.errorhandling.{Option, Some, None}
+import part1.errorhandling.{Either, Right, Left}
 
 import scala.{Option => _, Some => _}
 
 
 object Main {
 	def main(args: Array[String]): Unit = {
-		val oList = List(Some(1), Some(2), Some(3), Some(4))
+		val eList = List(Right(1), Right(2), Right(3), Right(4), Left("Failed"))
 
-		val x = Option.sequence2(oList)
+		val x = Either.sequence(eList)
 		println(x)
 	}
 }
