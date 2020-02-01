@@ -1,4 +1,4 @@
-package introduction
+package part1.gettingstarted
 
 object GettingStarted {
 

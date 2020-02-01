@@ -1,4 +1,4 @@
-package introduction
+package part1.datastructures
 
 sealed trait Tree[+A]
 case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
