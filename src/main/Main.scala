@@ -1,13 +1,13 @@
-import part1.errorhandling.{Either, Right, Left}
-
-import scala.{Option => _, Some => _}
+import scala.{Stream => _}
+import part1.laziness.Stream
 
 
 object Main {
 	def main(args: Array[String]): Unit = {
-		val eList = List(Right(1), Right(2), Right(3), Right(4))
+		val s = Stream.from(1).take(5)
+		val s2 = Stream.constant(34).take(3)
 
-		val x = Either.sequence(eList)
+		val x = s.scanRight(0)(_ + _).toList
 		println(x)
 	}
 }
