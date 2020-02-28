@@ -1,13 +1,12 @@
-import scala.{Stream => _}
-import part1.laziness.Stream
+import part1.state.RNG.Rand
+import part1.state.{RNG, SimpleRNG}
 
 
 object Main {
 	def main(args: Array[String]): Unit = {
-		val s = Stream.from(1).take(5)
-		val s2 = Stream.constant(34).take(3)
+		val rng = SimpleRNG(42350879)
 
-		val x = s.scanRight(0)(_ + _).toList
-		println(x)
+		val x = RNG.doubleIntViaBoth
+		println(x(rng))
 	}
 }
