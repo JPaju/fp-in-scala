@@ -1,5 +1,5 @@
-import part1.state.RNG.Rand
-import part1.state.{RNG, SimpleRNG}
+import part1.state.RNG
+import part1.state.RNG.SimpleRNG
 
 
 object Main {

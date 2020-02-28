@@ -6,6 +6,15 @@ trait RNG {
 
 object RNG {
 
+	case class SimpleRNG(seed: Long) extends RNG {
+		def nextInt: (Int, RNG) = {
+			val newSeed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL
+			val nextRNG = SimpleRNG(newSeed)
+			val n = (newSeed >>> 16).toInt
+			(n, nextRNG)
+		}
+	}
+
 	def nonNegativeInt(rng: RNG): (Int, RNG) = {
 		val (i , r) = rng.nextInt
 		if (i < 0) ((i+1).abs, r)
@@ -116,14 +125,29 @@ object RNG {
 
 	def map2ViaFlatMap[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A,B) => C): Rand[C] =
 		flatMap(ra)(a => map(rb)(b => f(a,b)))
+
+
 }
 
+import State._
 
-case class SimpleRNG(seed: Long) extends RNG {
-	def nextInt: (Int, RNG) = {
-		val newSeed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL
-		val nextRNG = SimpleRNG(newSeed)
-		val n = (newSeed >>> 16).toInt
-		(n, nextRNG)
-	}
+case class State[S, +A](run: S => (A, S)) {
+	def map[B](f: A => B): State[S, B] =
+		flatMap(a => unit(f(a)))
+
+	def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
+		flatMap(a => sb map(b => f(a,b)))
+
+	def flatMap[B](f: A => State[S, B]): State[S, B] =
+		State(s => {
+			val (a, ss) = run(s)
+			f(a) run ss
+		})
+}
+
+object State {
+	def unit[A, S](a: A): State[S, A] = State((a, _))
+
+	def sequence[A, S](fs: List[State[S, A]]): State[S, List[A]] =
+		fs.foldRight(unit[List[A], S](List()))((s, l) => s.map2(l)(_ :: _))
 }
