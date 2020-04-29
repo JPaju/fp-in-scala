@@ -12,11 +12,11 @@ sealed trait Stream[+A] {
 
 	def headOption: Option[A] = this match {
 		case Empty => None
-		case Cons(h, t) => Some(h())
+		case Cons(h, _) => Some(h())
 	}
 
 	def take(n: Int): Stream[A] = this match {
-		case Cons(h, t) if n == 1 => cons(h(), empty)
+		case Cons(h, _) if n == 1 => cons(h(), empty)
 		case Cons(h, t) if n > 0 => cons(h(), t().take(n-1))
 		case _ => Empty
 	}
@@ -71,7 +71,7 @@ sealed trait Stream[+A] {
 
 	def takeWhileViaUnfold(p: A => Boolean): Stream[A] =
 		unfold(this) {
-			case Cons(h, t) if(p(h())) => Some(h(), t())
+			case Cons(h, t) if p(h()) => Some(h(), t())
 			case _ => None
 		}
 
@@ -83,13 +83,13 @@ sealed trait Stream[+A] {
 
 	def zipAll[B](s2: Stream[B]): Stream[(Option[A], Option[B])] =
 		unfold((this, s2)) {
-			case (Empty, Cons(h,t)) => Some(((None, Some(h()))), (empty, t()))
-			case (Cons(h,t), Empty) => Some((((Some(h()), None))), (t(), empty))
+			case (Empty, Cons(h,t)) => Some((None, Some(h())), (empty, t()))
+			case (Cons(h,t), Empty) => Some((Some(h()), None), (t(), empty))
 			case (Cons(h1,t1), Cons(h2,t2)) => Some((Some(h1()), Some(h2())), (t1(), t2()))
 			case _ => None
 		}
 
-	def startsWith[A](s: Stream[A]): Boolean =
+	def startsWith[B](s: Stream[B]): Boolean =
 		zipAll(s).takeWhile(_._2.isDefined) forAll { case (a,b) => a == b}
 
 	def tails: Stream[Stream[A]] =
@@ -139,7 +139,7 @@ object Stream {
 		}
 
 	def constantViaUnfold[A](a: A): Stream[A] =
-		unfold(a)((_ => Some(a, a)))
+		unfold(a)(_ => Some(a, a))
 
 	def fromViaUnfold(n: Int): Stream[Int] =
 		unfold(n)(n => Some(n, n+1))

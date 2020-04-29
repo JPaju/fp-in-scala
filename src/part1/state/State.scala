@@ -150,4 +150,14 @@ object State {
 
 	def sequence[A, S](fs: List[State[S, A]]): State[S, List[A]] =
 		fs.foldRight(unit[List[A], S](List()))((s, l) => s.map2(l)(_ :: _))
+
+	def modify[S](f: S => S): State[S, Unit] = for {
+		s <- get
+		_ <- set(f(s))
+	} yield ()
+
+	def get[S]: State[S, S] = State(s => (s, s))
+
+	def set[S](s: S): State[S, Unit] = State(_ => ((), s))
+
 }

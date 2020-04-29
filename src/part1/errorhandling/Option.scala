@@ -22,7 +22,7 @@ sealed trait Option[+A] {
 	}
 
 	def filter(p: A => Boolean): Option[A] = this match {
-		case Some(v) if (p(v)) => this
+		case Some(v) if p(v) => this
 		case None => None
 	}
 }
