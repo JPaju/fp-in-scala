@@ -1,4 +1,4 @@
-package part1.state
+package fpinscala.part1.state
 
 trait RNG {
 	def nextInt: (Int, RNG)

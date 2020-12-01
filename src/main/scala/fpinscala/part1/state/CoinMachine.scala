@@ -1,6 +1,6 @@
-package part1.state
+package fpinscala.part1.state
 
-import part1.state.State.{get, modify, sequence}
+import fpinscala.part1.state.State.{get, modify, sequence}
 
 sealed trait Input
 case object Coin extends Input

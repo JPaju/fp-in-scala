@@ -1,4 +1,4 @@
-package part1.laziness
+package fpinscala.part1.laziness
 
 import Stream._
 

@@ -1,4 +1,4 @@
-package part1.errorhandling
+package fpinscala.part1.errorhandling
 
 
 import scala.{Option => _, Either => _, _}
