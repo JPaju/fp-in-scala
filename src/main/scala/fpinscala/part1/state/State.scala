@@ -26,6 +26,11 @@ object RNG {
 		(i / (Int.MaxValue.toDouble + 1), r)
 	}
 
+	def boolean(rng: RNG): (Boolean, RNG) = {
+		val (i, r) = rng.nextInt
+		(i > 0, r)
+	}
+
 	def intDouble(rng: RNG): ((Int, Double), RNG) = {
 		val (i, rng2) = rng.nextInt
 		val (d, r) = double(rng2)
@@ -125,8 +130,6 @@ object RNG {
 
 	def map2ViaFlatMap[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A,B) => C): Rand[C] =
 		flatMap(ra)(a => map(rb)(b => f(a,b)))
-
-
 }
 
 import State._
