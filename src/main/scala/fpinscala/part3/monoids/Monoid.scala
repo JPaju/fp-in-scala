@@ -1,4 +1,4 @@
-package fpinscala.part3
+package fpinscala.part3.monoids
 
 import fpinscala.part2.testing.{ Gen, Prop }
 import fpinscala.part2.testing.Prop.forAll

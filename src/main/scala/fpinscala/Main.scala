@@ -3,7 +3,7 @@ package fpinscala
 import fpinscala.part1.state.RNG
 import fpinscala.part2.testing.{ Gen, Prop }
 import fpinscala.part2.testing.Gen.stringN
-import fpinscala.part3.{ Monoid, Part, Stub, WordCount }
+import fpinscala.part3.monoids.{ Monoid, Part, Stub, WordCount }
 
 object Main {
 

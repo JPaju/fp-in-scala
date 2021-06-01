@@ -1,4 +1,4 @@
-package fpinscala.part3
+package fpinscala.part3.monoids
 
 sealed trait WordCount
 
