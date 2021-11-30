@@ -3,6 +3,7 @@ package fpinscala.part3.monads
 import scala.language.higherKinds
 
 import fpinscala.part1.laziness.Stream
+import fpinscala.part1.state.State
 import fpinscala.part2.parallelism.Par
 import fpinscala.part2.parallelism.Par.Par
 import fpinscala.part2.testing.Gen
@@ -89,4 +90,13 @@ object Monad {
     override def flatMap[A, B](fa: List[A])(afb: A => List[B]): List[B] =
       fa.flatMap(afb)
   }
+
+  def stateMonad[S]: Monad[({ type AState[a] = State[S, a] })#AState] =
+    new Monad[({ type AState[a] = State[S, a] })#AState] {
+      override def unit[A](a: => A): State[S, A] =
+        State.unit(a)
+
+      override def flatMap[A, B](fa: State[S, A])(afb: A => State[S, B]): State[S, B] =
+        fa.flatMap(afb)
+    }
 }
